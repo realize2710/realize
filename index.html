@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Realize - Resumos Educacionais</title>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Open Sans', sans-serif; line-height: 1.6; color: #333; background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #E0F6FF 100%); min-height: 100vh; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+  header { text-align: center; margin-bottom: 40px; background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+  .logo { font-family: 'Dancing Script', cursive; font-size: 4em; font-weight: 700; color: #4682B4; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
+  .slogan { font-family: 'Playfair Display', serif; font-size: 1.4em; font-style: italic; color: #5F9EA0; margin-bottom: 30px; font-weight: 400; }
+  .search-container { max-width: 600px; margin: 0 auto; position: relative; }
+  .search-box { width: 100%; padding: 15px 20px; font-size: 1.1em; font-family: 'Open Sans', sans-serif; border: none; border-radius: 50px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); outline: none; transition: all 0.3s ease; }
+  .search-box:focus { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+  .search-btn { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #4682B4; color: white; border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-family: 'Open Sans', sans-serif; }
+  .search-btn:hover { background: #5F9EA0; transform: translateY(-50%) scale(1.05); }
+  .about-section { background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px; }
+  .about-section h2 { font-family: 'Playfair Display', serif; color: #4682B4; font-size: 2.8em; text-align: center; margin-bottom: 30px; font-weight: 700; }
+  .about-text { font-family: 'Open Sans', sans-serif; font-size: 1.1em; text-align: center; color: #555; line-height: 1.8; margin-bottom: 40px; }
+  .submission-info h3 { font-family: 'Playfair Display', serif; color: #4682B4; font-size: 2em; text-align: center; margin-bottom: 20px; }
+  .submission-info p { font-family: 'Open Sans', sans-serif; font-size: 1.1em; text-align: center; color: #555; line-height: 1.8; }
+  .materias-section { background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px; }
+  .materias-section h2 { font-family: 'Playfair Display', serif; color: #4682B4; font-size: 2.8em; text-align: center; margin-bottom: 40px; font-weight: 700; }
+  .materias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+  .materia-card { background: linear-gradient(135deg, #F0F8FF, #E6F3FF); border: 2px solid #B0E0E6; border-radius: 15px; padding: 25px; transition: all 0.3s ease; cursor: pointer; }
+  .materia-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(70,130,180,0.2); border-color: #4682B4; }
+  .materia-title { font-family: 'Playfair Display', serif; font-size: 1.8em; color: #4682B4; font-weight: 700; margin-bottom: 15px; text-align: center; }
+  .resumos-list { display: none; }
+  .resumos-list.active { display: block; }
+  .resumo-item { background: #ffffff; padding: 20px; margin: 15px 0; border-radius: 10px; border-left: 4px solid #4682B4; transition: all 0.3s ease; cursor: pointer; position: relative; }
+  .resumo-item:hover { background: #f8f9fa; transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+  .resumo-title { font-family: 'Playfair Display', serif; font-weight: 600; color: #4682B4; margin-bottom: 10px; font-size: 1.2em; }
+  .resumo-preview { font-family: 'Open Sans', sans-serif; color: #666; font-size: 0.95em; line-height: 1.5; }
+  .resumo-author { font-family: 'Open Sans', sans-serif; color: #888; font-size: 0.85em; margin-top: 8px; font-style: italic; }
+  .delete-btn { position: absolute; top: 10px; right: 10px; background: #FF6347; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; display: none; }
+  .edit-mode .delete-btn { display: block; }
+  .team-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-bottom: 40px; }
+  .team-member { background: rgba(255,255,255,0.95); padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; transition: all 0.3s ease; }
+  .team-member:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.15); }
+  .member-photo { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #4682B4, #87CEEB); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 3.5em; color: white; font-weight: bold; }
+  .member-name { font-family: 'Playfair Display', serif; font-size: 1.6em; color: #4682B4; font-weight: 700; margin-bottom: 10px; }
+  .member-birth { font-family: 'Open Sans', sans-serif; color: #888; font-size: 0.95em; margin-bottom: 20px; }
+  .member-bio { font-family: 'Open Sans', sans-serif; text-align: justify; line-height: 1.7; color: #555; font-size: 1.05em; }
+  footer { background: rgba(255,255,255,0.95); padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; }
+  .footer-content { display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap; }
+  .footer-logo { font-family: 'Dancing Script', cursive; font-size: 2.5em; font-weight: 700; color: #4682B4; }
+  .contact-info { display: flex; flex-direction: column; gap: 12px; }
+  .contact-item { display: flex; align-items: center; gap: 12px; color: #555; font-family: 'Open Sans', sans-serif; }
+  .contact-item a { color: #4682B4; text-decoration: none; transition: all 0.3s ease; }
+  .contact-item a:hover { color: #5F9EA0; transform: scale(1.05); }
+  /* Ícone engrenagem fixo canto inferior direito */
+  #configButton {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    fill: #4682B4;
+    transition: fill 0.3s ease;
+    z-index: 10000;
+  }
+  #configButton:hover,
+  #configButton:focus {
+    fill: #2c5d8a;
+    outline: none;
+  }
+  /* Modal */
+  #modalOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0,0,0,0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 11000;
+  }
+  #modalOverlay.active {
+    display: flex;
+  }
+  #modalContent {
+    background-color: #f0f8ff;
+    border-radius: 14px;
+    width: 420px;
+    max-width: 90vw;
+    padding: 2rem 2.5rem 2.5rem 2.5rem;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    position: relative;
+    font-family: 'Open Sans', sans-serif;
+    color: #003366;
+  }
+  #modalContent h2 {
+    margin-top: 0;
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  #modalCloseBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #003366;
+    cursor: pointer;
+  }
+  /* Tabs */
+  #modalTabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .tabButton {
+    flex: 1;
+    background-color: #cce6ff;
+    border: none;
+    padding: 0.6rem 0;
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    cursor: pointer;
+    border-radius: 8px 8px 0 0;
+    color: #003366;
+    transition: background-color 0.3s ease;
+  }
+  .tabButton.active {
+    background-color: #4682B4;
+    color: white;
+  }
+  #tabContentAdd, #tabContentEdit {
+    display: none;
+  }
+  #tabContentAdd.active, #tabContentEdit.active {
+    display: block;
+  }
+  /* Formulário */
+  #addSummaryForm label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+  #addSummaryForm select,
+  #addSummaryForm input[type="text"],
+  #addSummaryForm textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.3rem;
+    border: 1.5px solid #003366;
+    border-radius: 6px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1rem;
+  }
+  #addSummaryForm textarea {
+    resize: vertical;
+  }
+  #addSummaryForm button {
+    margin-top: 1.8rem;
+    background-color: #4682B4;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+  }
+  #addSummaryForm button:hover {
+    background-color: #2c5d8a;
+  }
+  /* Lista de resumos para edição */
+  #editSummaryList {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 1rem;
+    padding-left: 0;
+    list-style: none;
+  }
+  #editSummaryList li {
+    background-color: #d9eaff;
+    margin-bottom: 0.7rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    color: #003366;
+  }
+  #editSummaryList li button.deleteBtn {
+    background-color: #cc0000;
+    border: none;
+    color: white;
+    padding: 0.3rem 0.7rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+  }
+  #editSummaryList li button.deleteBtn:hover {
+    background-color: #990000;
+  }
+  /* Alertas */
+  #modalError {
+    color: red;
+    margin-top: 0.5rem;
+    font-weight: 600;
+  }
+  /* Responsividade */
+  @media (max-width: 768px) {
+    .container { padding: 10px; }
+    .logo { font-size: 3em; }
+    .slogan { font-size: 1.2em; }
+    .materias-grid { grid-template-columns: 1fr; }
+    .team-section { grid-template-columns: 1fr; }
+    .footer-content { flex-direction: column; gap: 25px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="logo">Realize</div>
+    <div class="slogan">Resumos feitos por estudantes, para estudantes</div>
+    <div class="search-container">
+      <input type="text" class="search-box" placeholder="Pesquisar resumos por matéria ou tópico..." id="searchInput" />
+      <button class="search-btn" onclick="searchResumos()">Buscar</button>
+    </div>
+  </header>
+
+  <div class="about-section">
+    <h2>Sobre o Projeto</h2>
+    <div class="about-text">
+      O Realize é um projeto criado com o objetivo de compartilhar conhecimento de forma clara e acessível. 
+      Acreditamos que a educação deve ser para todos, e por isso transformamos conteúdos complexos em resumos 
+      compreensíveis. Nosso sonho é fazer a diferença na vida das pessoas através do conhecimento, porque 
+      acreditamos que ele é a base de tudo na vida.
+    </div>
+    <div class="submission-info">
+      <h3>Como Contribuir</h3>
+      <p>Outros estudantes podem enviar seus resumos por email para <strong><a href="mailto:realize2710@gmail.com">realize2710@gmail.com</a></strong>. 
+      Incluam o nome da matéria, o tópico do resumo e seu nome para aparecer como autor. 
+      Juntos, construímos uma biblioteca de conhecimento feita por estudantes, para estudantes.</p>
+    </div>
+  </div>
+
+  <div class="materias-section">
+    <h2>Matérias</h2>
+    <div class="materias-grid">
+      <div class="materia-card" onclick="toggleMateria('matematica')">
+        <div class="materia-title">Matemática</div>
+        <div class="resumos-list" id="matematica"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('portugues')">
+        <div class="materia-title">Português</div>
+        <div class="resumos-list" id="portugues"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('historia')">
+        <div class="materia-title">História</div>
+        <div class="resumos-list" id="historia"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('geografia')">
+        <div class="materia-title">Geografia</div>
+        <div class="resumos-list" id="geografia"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('ciencias')">
+        <div class="materia-title">Ciências</div>
+        <div class="resumos-list" id="ciencias"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('ingles')">
+        <div class="materia-title">Inglês</div>
+        <div class="resumos-list" id="ingles"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('fisica')">
+        <div class="materia-title">Física</div>
+        <div class="resumos-list" id="fisica"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('quimica')">
+        <div class="materia-title">Química</div>
+        <div class="resumos-list" id="quimica"></div>
+      </div>
+      <div class="materia-card" onclick="toggleMateria('biologia')">
+        <div class="materia-title">Biologia</div>
+        <div class="resumos-list" id="biologia"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="team-section">
+    <div class="team-member">
+      <div class="member-photo">C</div>
+      <div class="member-name">Carolina Corrêa de Souza Valadares</div>
+      <div class="member-birth">27 de fevereiro de 2012</div>
+      <div class="member-bio">
+        Adoro ler livros e ver filmes, e aspiro por um bom futuro acadêmico. Venho desenvolvendo uma grande 
+        curiosidade pelo mundo e pelas diferentes áreas do conhecimento. Tenho o sonho de estudar no exterior, 
+        especialmente nos Estados Unidos, e acredito que compartilhar conhecimento é uma forma de crescimento 
+        pessoal e coletivo. Com este projeto, quero transformar os conteúdos que estudo em textos claros e 
+        acessíveis, para que qualquer pessoa possa entender.
+      </div>
+    </div>
+
+    <div class="team-member">
+      <div class="member-photo">J</div>
+      <div class="member-name">Julia Queiros Mendes</div>
+      <div class="member-birth">10 de fevereiro de 2012</div>
+      <div class="member-bio">
+        Passo meu tempo livre lendo livros, vendo séries ou fazendo crochê. Sonho em estudar em uma universidade 
+        no exterior, mais especificamente nos Estados Unidos. Acredito que o conhecimento é a base de tudo na vida 
+        e, por isso, desejo compartilhar o que sei com outras pessoas. Afinal, se eu não puder ajudar o próximo com 
+        aquilo que está ao meu alcance, então de que valeria o meu aprendizado? Com esse projeto, eu espero conseguir 
+        fazer a diferença na vida de outras pessoas!
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo">Realize</div>
+      <div class="contact-info">
+        <div class="contact-item">
+          Email: <a href="mailto:realize2710@gmail.com">realize2710@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          TikTok: <a href="https://www.tiktok.com/@.realizing_" target="_blank" rel="noopener noreferrer">.realizing_</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<!-- Botão configuração com ícone -->
+<button id="configButton" aria-label="Abrir configurações" title="Configurações" aria-expanded="false">
+  <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" focusable="false">
+    <path d="M19.14 12.94c.04-.31.07-.63.07-.94s-.03-.63-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.63l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.007 7.007 0 0 0-1.62-.94l-.36-2.54A.5.5 0 0 0 14 3h-4a.5.5 0 0 0-.5.42l-.36 2.54a7.007 7.007 0 0 0-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.68 9.48a.5.5 0 0 0 .12.63l2.03 1.58c-.04.31-.07.63-.07.94s.03.63.07.94l-2.03 1.58a.5.5 0 0 0-.12.63l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.36-2.54c.58-.24 1.12-.56 1.62-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.63l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>
+  </svg>
+</button>
+
+<!-- Modal -->
+<div id="modalOverlay" aria-hidden="true" aria-labelledby="modalTitle">
+  <div id="modalContent">
+    <button id="modalCloseBtn" aria-label="Fechar modal">&times;</button>
+    <h2 id="modalTitle">Configurações</h2>
+    <div id="modalTabs">
+      <button class="tabButton active" id="tabAdd" data-tab="add">Adicionar Resumo</button>
+      <button class="tabButton" id="tabEdit" data-tab="edit">Modo de Edição</button>
+    </div>
+    <div id="modalError" role="alert" aria-live="assertive"></div>
+    <div id="tabContentAdd" class="tabContent active">
+      <form id="addSummaryForm">
+        <label for="subjectSelect">Matéria (1.Matemática, 2.Português, 3.História, 4.Geografia, 5.Ciências, 6.Inglês, 7.Física, 8.Química, 9.Biologia):</label>
+        <select id="subjectSelect" required aria-describedby="subjectDesc">
+          <option value="">Selecione</option>
+          <option value="matematica">1. Matemática</option>
+          <option value="portugues">2. Português</option>
+          <option value="historia">3. História</option>
+          <option value="geografia">4. Geografia</option>
+          <option value="ciencias">5. Ciências</option>
+          <option value="ingles">6. Inglês</option>
+          <option value="fisica">7. Física</option>
+          <option value="quimica">8. Química</option>
+          <option value="biologia">9. Biologia</option>
+        </select>
+        <div id="subjectDesc" hidden>Escolha o número da matéria.</div>
+        <label for="topicInput">Título do resumo:</label>
+        <input type="text" id="topicInput" placeholder="Ex: Funções" required />
+        <label for="contentInput">Conteúdo do resumo:</label>
+        <textarea id="contentInput" rows="5" placeholder="Digite o resumo completo aqui..." required></textarea>
+        <label for="authorInput">Autor:</label>
+        <input type="text" id="authorInput" placeholder="Seu nome" required />
+        <button type="submit">Adicionar Resumo</button>
+      </form>
+    </div>
+    <div id="tabContentEdit" class="tabContent">
+      <button id="editModeBtn">Ativar Modo de Edição</button>
+      <button id="importBtn" style="margin-top: 10px;">Importar Resumos</button>
+      <ul id="editSummaryList"></ul>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ADMIN_PASSWORD = "mydream5678";
+  let resumosPorMateria = {
+    matematica: [], portugues: [], historia: [], geografia: [],
+    ciencias: [], ingles: [], fisica: [], quimica: [], biologia: []
+  };
+  let isEditMode = false;
+  const subjectsArray = ['matematica', 'portugues', 'historia', 'geografia', 'ciencias', 'ingles', 'fisica', 'quimica', 'biologia'];
+
+  const configButton = document.getElementById('configButton');
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const modalTabs = document.querySelectorAll('.tabButton');
+  const tabContents = document.querySelectorAll('.tabContent');
+  const modalError = document.getElementById('modalError');
+  const editModeBtn = document.getElementById('editModeBtn');
+  const addForm = document.getElementById('addSummaryForm');
+  const importBtn = document.getElementById('importBtn');
+  const editList = document.getElementById('editSummaryList');
+
+  configButton.addEventListener('click', function() {
+    const password = prompt("Por favor, digite a senha de administrador:");
+    if (password === ADMIN_PASSWORD) {
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      modalOverlay.classList.add('active');
+      configButton.setAttribute('aria-expanded', 'true');
+    } else {
+      alert("Senha incorreta. Acesso negado.");
+    }
+  });
+
+  modalCloseBtn.addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeModal();
+  });
+
+  modalTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      modalTabs.forEach(t => t.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('tabContent' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1)).classList.add('active');
+    });
+  });
+
+  addForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const materia = document.getElementById('subjectSelect').value;
+    const topic = document.getElementById('topicInput').value.trim();
+    const content = document.getElementById('contentInput').value.trim();
+    const author = document.getElementById('authorInput').value.trim();
+
+    if (!materia || !topic || !content || !author) {
+      alert('Por favor, preencha todos os campos.');
+      return;
+    }
+
+    const newId = resumosPorMateria[materia].length > 0 ? Math.max(...resumosPorMateria[materia].map(r => r.id)) + 1 : 1;
+    resumosPorMateria[materia].push({ id: newId, title: topic, preview: content, author });
+    displayResumos(materia, resumosPorMateria[materia]);
+    addForm.reset();
+    alert('Resumo adicionado com sucesso!');
+  });
+
+  editModeBtn.addEventListener('click', () => {
+    isEditMode = !isEditMode;
+    document.body.classList.toggle('edit-mode', isEditMode);
+    editModeBtn.textContent = isEditMode ? "Desativar Modo de Edição" : "Ativar Modo de Edição";
+    renderEditList();
+  });
+
+  importBtn.addEventListener('click', () => {
+    const data = prompt("Cole aqui os dados dos resumos em JSON:");
+    if (!data) return;
+    try {
+      const parsedData = JSON.parse(data);
+      resumosPorMateria = parsedData;
+      subjectsArray.forEach(materia => {
+        displayResumos(materia, resumosPorMateria[materia] || []);
+      });
+      renderEditList();
+      alert('Resumos importados com sucesso!');
+    } catch (e) {
+      alert('Formato JSON inválido.');
+    }
+  });
+
+  function closeModal() {
+    modalOverlay.setAttribute('aria-hidden', 'true');
+    modalOverlay.classList.remove('active');
+    configButton.setAttribute('aria-expanded', 'false');
+  }
+
+  function toggleMateria(materia) {
+    const resumosList = document.getElementById(materia);
+    resumosList.classList.toggle('active');
+    
+    if (resumosList.classList.contains('active') && resumosList.innerHTML === '') {
+      displayResumos(materia, resumosPorMateria[materia] || []);
+    }
+  }
+
+  function displayResumos(materia, resumos) {
+    const container = document.getElementById(materia);
+    if (!resumos || resumos.length === 0) {
+      container.innerHTML = '<p style="text-align: center; color: #888; font-style: italic; padding: 20px;">Nenhum resumo disponível ainda.</p>';
+      return;
+    }
+
+    container.innerHTML = resumos.map(resumo => `
+      <div class="resumo-item" onclick="showResumo('${materia}', ${resumo.id})">
+        <div class="resumo-title">${resumo.title}</div>
+        <div class="resumo-preview">${resumo.preview.substring(0, 100)}...</div>
+        <div class="resumo-author">Por: ${resumo.author}</div>
+        <button class="delete-btn" onclick="event.stopPropagation(); deleteResumo('${materia}', ${resumo.id})">Excluir</button>
+      </div>
+    `).join('');
+  }
+
+  function showResumo(materia, id) {
+    const resumo = resumosPorMateria[materia].find(r => r.id === id);
+    if (resumo) {
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.8); display: flex; align-items: center;
+        justify-content: center; z-index: 12000; padding: 20px;
+      `;
+      modal.innerHTML = `
+        <div style="background: white; border-radius: 15px; padding: 30px; max-width: 800px; max-height: 80vh; overflow-y: auto; position: relative;">
+          <button onclick="this.parentElement.parentElement.remove()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: #666;">&times;</button>
+          <h2 style="font-family: 'Playfair Display', serif; color: #4682B4; margin-bottom: 20px;">${resumo.title}</h2>
+          <div style="font-family: 'Open Sans', sans-serif; line-height: 1.6; color: #333; white-space: pre-wrap;">${resumo.preview}</div>
+          <div style="margin-top: 20px; font-style: italic; color: #888; text-align: right;">Por: ${resumo.author}</div>
+        </div>
+      `;
+      document.body.appendChild(modal);
+    }
+  }
+
+  function deleteResumo(materia, id) {
+    if (confirm('Tem certeza que deseja excluir este resumo?')) {
+      resumosPorMateria[materia] = resumosPorMateria[materia].filter(r => r.id !== id);
+      displayResumos(materia, resumosPorMateria[materia]);
+      renderEditList();
+    }
+  }
+
+  function renderEditList() {
+    if (!isEditMode) return;
+    
+    editList.innerHTML = '';
+    subjectsArray.forEach(materia => {
+      if (resumosPorMateria[materia] && resumosPorMateria[materia].length > 0) {
+        resumosPorMateria[materia].forEach(resumo => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <span>${materia.charAt(0).toUpperCase() + materia.slice(1)}: ${resumo.title}</span>
+            <button class="deleteBtn" onclick="deleteResumo('${materia}', ${resumo.id})">Excluir</button>
+          `;
+          editList.appendChild(li);
+        });
+      }
+    });
+  }
+
+  function searchResumos() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    if (!searchTerm) {
+      alert('Por favor, digite algo para pesquisar.');
+      return;
+    }
+
+    let found = false;
+    subjectsArray.forEach(materia => {
+      const resumos = resumosPorMateria[materia] || [];
+      const filteredResumos = resumos.filter(resumo => 
+        resumo.title.toLowerCase().includes(searchTerm) || 
+        resumo.preview.toLowerCase().includes(searchTerm)
+      );
+      
+      if (filteredResumos.length > 0) {
+        found = true;
+        const container = document.getElementById(materia);
+        container.classList.add('active');
+        displayResumos(materia, filteredResumos);
+      }
+    });
+
+    if (!found) {
+      alert('Nenhum resumo encontrado para: ' + searchTerm);
+    }
+  }
+
+  // Adiciona suporte para Enter na busca
+  document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      searchResumos();
+    }
+  });
+
+  // Fechar modal com Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
+      closeModal();
+    }
+  });
+</script>
+</body>
+</html>
