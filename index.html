@@ -35,7 +35,7 @@
   .resumo-title { font-family: 'Playfair Display', serif; font-weight: 600; color: #4682B4; margin-bottom: 10px; font-size: 1.2em; }
   .resumo-preview { font-family: 'Open Sans', sans-serif; color: #666; font-size: 0.95em; line-height: 1.5; }
   .resumo-author { font-family: 'Open Sans', sans-serif; color: #888; font-size: 0.85em; margin-top: 8px; font-style: italic; }
-  .delete-btn { position: absolute; top: 10px; right: 10px; background: #FF6347; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; display: none; }
+  .delete-btn { position: absolute; top: 10px; right: 10px; background: #FF6347; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; display: none; font-size: 16px; }
   .edit-mode .delete-btn { display: block; }
   .team-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-bottom: 40px; }
   .team-member { background: rgba(255,255,255,0.95); padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; transition: all 0.3s ease; }
@@ -51,7 +51,6 @@
   .contact-item { display: flex; align-items: center; gap: 12px; color: #555; font-family: 'Open Sans', sans-serif; }
   .contact-item a { color: #4682B4; text-decoration: none; transition: all 0.3s ease; }
   .contact-item a:hover { color: #5F9EA0; transform: scale(1.05); }
-  /* Ícone engrenagem fixo canto inferior direito */
   #configButton {
     position: fixed;
     bottom: 25px;
@@ -71,7 +70,6 @@
     fill: #2c5d8a;
     outline: none;
   }
-  /* Modal */
   #modalOverlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -112,7 +110,6 @@
     color: #003366;
     cursor: pointer;
   }
-  /* Tabs */
   #modalTabs {
     display: flex;
     gap: 1rem;
@@ -140,7 +137,6 @@
   #tabContentAdd.active, #tabContentEdit.active {
     display: block;
   }
-  /* Formulário */
   #addSummaryForm label {
     display: block;
     margin-top: 1rem;
@@ -175,7 +171,6 @@
   #addSummaryForm button:hover {
     background-color: #2c5d8a;
   }
-  /* Lista de resumos para edição */
   #editSummaryList {
     max-height: 200px;
     overflow-y: auto;
@@ -209,13 +204,37 @@
   #editSummaryList li button.deleteBtn:hover {
     background-color: #990000;
   }
-  /* Alertas */
   #modalError {
     color: red;
     margin-top: 0.5rem;
     font-weight: 600;
   }
-  /* Responsividade */
+  .edit-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1rem;
+  }
+  .edit-buttons button {
+    background-color: #4682B4;
+    color: white;
+    border: none;
+    padding: 0.7rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    transition: background-color 0.3s ease;
+  }
+  .edit-buttons button:hover {
+    background-color: #2c5d8a;
+  }
+  .edit-buttons button.danger {
+    background-color: #cc0000;
+  }
+  .edit-buttons button.danger:hover {
+    background-color: #990000;
+  }
   @media (max-width: 768px) {
     .container { padding: 10px; }
     .logo { font-size: 3em; }
@@ -338,14 +357,12 @@
   </footer>
 </div>
 
-<!-- Botão configuração com ícone -->
 <button id="configButton" aria-label="Abrir configurações" title="Configurações" aria-expanded="false">
   <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" focusable="false">
     <path d="M19.14 12.94c.04-.31.07-.63.07-.94s-.03-.63-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.63l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.007 7.007 0 0 0-1.62-.94l-.36-2.54A.5.5 0 0 0 14 3h-4a.5.5 0 0 0-.5.42l-.36 2.54a7.007 7.007 0 0 0-1.62.94l-2.39-.96a.5.5 0 0 0-.6.22L2.68 9.48a.5.5 0 0 0 .12.63l2.03 1.58c-.04.31-.07.63-.07.94s.03.63.07.94l-2.03 1.58a.5.5 0 0 0-.12.63l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.36-2.54c.58-.24 1.12-.56 1.62-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.63l-2.03-1.58zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/>
   </svg>
 </button>
 
-<!-- Modal -->
 <div id="modalOverlay" aria-hidden="true" aria-labelledby="modalTitle">
   <div id="modalContent">
     <button id="modalCloseBtn" aria-label="Fechar modal">&times;</button>
@@ -357,22 +374,21 @@
     <div id="modalError" role="alert" aria-live="assertive"></div>
     <div id="tabContentAdd" class="tabContent active">
       <form id="addSummaryForm">
-        <label for="subjectSelect">Matéria (1.Matemática, 2.Português, 3.História, 4.Geografia, 5.Ciências, 6.Inglês, 7.Física, 8.Química, 9.Biologia):</label>
-        <select id="subjectSelect" required aria-describedby="subjectDesc">
-          <option value="">Selecione</option>
-          <option value="matematica">1. Matemática</option>
-          <option value="portugues">2. Português</option>
-          <option value="historia">3. História</option>
-          <option value="geografia">4. Geografia</option>
-          <option value="ciencias">5. Ciências</option>
-          <option value="ingles">6. Inglês</option>
-          <option value="fisica">7. Física</option>
-          <option value="quimica">8. Química</option>
-          <option value="biologia">9. Biologia</option>
+        <label for="subjectSelect">Matéria:</label>
+        <select id="subjectSelect" required>
+          <option value="">Selecione uma matéria</option>
+          <option value="matematica">Matemática</option>
+          <option value="portugues">Português</option>
+          <option value="historia">História</option>
+          <option value="geografia">Geografia</option>
+          <option value="ciencias">Ciências</option>
+          <option value="ingles">Inglês</option>
+          <option value="fisica">Física</option>
+          <option value="quimica">Química</option>
+          <option value="biologia">Biologia</option>
         </select>
-        <div id="subjectDesc" hidden>Escolha o número da matéria.</div>
         <label for="topicInput">Título do resumo:</label>
-        <input type="text" id="topicInput" placeholder="Ex: Funções" required />
+        <input type="text" id="topicInput" placeholder="Ex: Funções Quadráticas" required />
         <label for="contentInput">Conteúdo do resumo:</label>
         <textarea id="contentInput" rows="5" placeholder="Digite o resumo completo aqui..." required></textarea>
         <label for="authorInput">Autor:</label>
@@ -381,8 +397,12 @@
       </form>
     </div>
     <div id="tabContentEdit" class="tabContent">
-      <button id="editModeBtn">Ativar Modo de Edição</button>
-      <button id="importBtn" style="margin-top: 10px;">Importar Resumos</button>
+      <div class="edit-buttons">
+        <button id="editModeBtn">Ativar Modo de Edição</button>
+        <button id="exportBtn">Exportar Backup</button>
+        <button id="importBtn">Importar Resumos</button>
+        <button id="clearDataBtn" class="danger">Limpar Todos os Dados</button>
+      </div>
       <ul id="editSummaryList"></ul>
     </div>
   </div>
@@ -397,6 +417,38 @@
   let isEditMode = false;
   const subjectsArray = ['matematica', 'portugues', 'historia', 'geografia', 'ciencias', 'ingles', 'fisica', 'quimica', 'biologia'];
 
+  function saveData() {
+    try {
+      const dataString = JSON.stringify(resumosPorMateria);
+      document.cookie = `resumosData=${encodeURIComponent(dataString)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+    } catch (e) {
+      console.error('Erro ao salvar dados:', e);
+    }
+  }
+
+  function loadData() {
+    try {
+      const cookies = document.cookie.split(';');
+      const dataCookie = cookies.find(cookie => cookie.trim().startsWith('resumosData='));
+      
+      if (dataCookie) {
+        const dataString = decodeURIComponent(dataCookie.split('=')[1]);
+        const loadedData = JSON.parse(dataString);
+        
+        if (loadedData && typeof loadedData === 'object') {
+          resumosPorMateria = { ...resumosPorMateria, ...loadedData };
+        }
+      }
+    } catch (e) {
+      console.error('Erro ao carregar dados:', e);
+    }
+  }
+
+  window.addEventListener('load', () => {
+    loadData();
+    console.log('Dados carregados:', resumosPorMateria);
+  });
+
   const configButton = document.getElementById('configButton');
   const modalOverlay = document.getElementById('modalOverlay');
   const modalCloseBtn = document.getElementById('modalCloseBtn');
@@ -406,6 +458,8 @@
   const editModeBtn = document.getElementById('editModeBtn');
   const addForm = document.getElementById('addSummaryForm');
   const importBtn = document.getElementById('importBtn');
+  const exportBtn = document.getElementById('exportBtn');
+  const clearDataBtn = document.getElementById('clearDataBtn');
   const editList = document.getElementById('editSummaryList');
 
   configButton.addEventListener('click', function() {
@@ -447,9 +501,12 @@
 
     const newId = resumosPorMateria[materia].length > 0 ? Math.max(...resumosPorMateria[materia].map(r => r.id)) + 1 : 1;
     resumosPorMateria[materia].push({ id: newId, title: topic, preview: content, author });
+    
+    saveData();
+    
     displayResumos(materia, resumosPorMateria[materia]);
     addForm.reset();
-    alert('Resumo adicionado com sucesso!');
+    alert('Resumo adicionado e salvo com sucesso!');
   });
 
   editModeBtn.addEventListener('click', () => {
@@ -457,6 +514,27 @@
     document.body.classList.toggle('edit-mode', isEditMode);
     editModeBtn.textContent = isEditMode ? "Desativar Modo de Edição" : "Ativar Modo de Edição";
     renderEditList();
+    
+    subjectsArray.forEach(materia => {
+      const container = document.getElementById(materia);
+      if (container.classList.contains('active')) {
+        displayResumos(materia, resumosPorMateria[materia] || []);
+      }
+    });
+  });
+
+  exportBtn.addEventListener('click', () => {
+    const dataString = JSON.stringify(resumosPorMateria, null, 2);
+    const blob = new Blob([dataString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resumos_backup.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('Backup exportado com sucesso!');
   });
 
   importBtn.addEventListener('click', () => {
@@ -465,13 +543,32 @@
     try {
       const parsedData = JSON.parse(data);
       resumosPorMateria = parsedData;
+      
+      saveData();
+      
       subjectsArray.forEach(materia => {
         displayResumos(materia, resumosPorMateria[materia] || []);
       });
       renderEditList();
-      alert('Resumos importados com sucesso!');
+      alert('Resumos importados e salvos com sucesso!');
     } catch (e) {
       alert('Formato JSON inválido.');
+    }
+  });
+
+  clearDataBtn.addEventListener('click', () => {
+    const confirmation = prompt('ATENÇÃO: Isso vai apagar TODOS os resumos!\nPara confirmar, digite "APAGAR TUDO":');
+    if (confirmation === 'APAGAR TUDO') {
+      resumosPorMateria = {
+        matematica: [], portugues: [], historia: [], geografia: [],
+        ciencias: [], ingles: [], fisica: [], quimica: [], biologia: []
+      };
+      saveData();
+      subjectsArray.forEach(materia => {
+        displayResumos(materia, resumosPorMateria[materia]);
+      });
+      renderEditList();
+      alert('Todos os dados foram apagados!');
     }
   });
 
@@ -502,7 +599,7 @@
         <div class="resumo-title">${resumo.title}</div>
         <div class="resumo-preview">${resumo.preview.substring(0, 100)}...</div>
         <div class="resumo-author">Por: ${resumo.author}</div>
-        <button class="delete-btn" onclick="event.stopPropagation(); deleteResumo('${materia}', ${resumo.id})">Excluir</button>
+        <button class="delete-btn" onclick="event.stopPropagation(); deleteResumo('${materia}', ${resumo.id})" title="Excluir resumo">🗑️</button>
       </div>
     `).join('');
   }
@@ -531,8 +628,12 @@
   function deleteResumo(materia, id) {
     if (confirm('Tem certeza que deseja excluir este resumo?')) {
       resumosPorMateria[materia] = resumosPorMateria[materia].filter(r => r.id !== id);
+      
+      saveData();
+      
       displayResumos(materia, resumosPorMateria[materia]);
       renderEditList();
+      alert('Resumo excluído e alterações salvas!');
     }
   }
 
@@ -562,34 +663,49 @@
     }
 
     let found = false;
+    let results = [];
+
     subjectsArray.forEach(materia => {
       const resumos = resumosPorMateria[materia] || [];
       const filteredResumos = resumos.filter(resumo => 
         resumo.title.toLowerCase().includes(searchTerm) || 
-        resumo.preview.toLowerCase().includes(searchTerm)
+        resumo.preview.toLowerCase().includes(searchTerm) ||
+        resumo.author.toLowerCase().includes(searchTerm)
       );
       
       if (filteredResumos.length > 0) {
         found = true;
-        const container = document.getElementById(materia);
-        container.classList.add('active');
-        displayResumos(materia, filteredResumos);
+        results.push({materia, resumos: filteredResumos});
       }
     });
 
     if (!found) {
       alert('Nenhum resumo encontrado para: ' + searchTerm);
+      return;
     }
+
+    // Fecha todas as seções primeiro
+    subjectsArray.forEach(materia => {
+      document.getElementById(materia).classList.remove('active');
+    });
+
+    // Abre e exibe apenas os resultados encontrados
+    results.forEach(result => {
+      const container = document.getElementById(result.materia);
+      container.classList.add('active');
+      displayResumos(result.materia, result.resumos);
+    });
+
+    // Scroll para a seção de matérias
+    document.querySelector('.materias-section').scrollIntoView({ behavior: 'smooth' });
   }
 
-  // Adiciona suporte para Enter na busca
   document.getElementById('searchInput').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') {
       searchResumos();
     }
   });
 
-  // Fechar modal com Escape
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
       closeModal();
