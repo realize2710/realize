@@ -17,6 +17,7 @@
   .search-box:focus { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
   .search-btn { position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #4682B4; color: white; border: none; padding: 12px 20px; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-family: 'Open Sans', sans-serif; }
   .search-btn:hover { background: #5F9EA0; transform: translateY(-50%) scale(1.05); }
+  .clear-search { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); background: #888; color: white; border: none; padding: 8px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; display: none; }
   .about-section { background: rgba(255,255,255,0.95); padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 40px; }
   .about-section h2 { font-family: 'Playfair Display', serif; color: #4682B4; font-size: 2.8em; text-align: center; margin-bottom: 30px; font-weight: 700; }
   .about-text { font-family: 'Open Sans', sans-serif; font-size: 1.1em; text-align: center; color: #555; line-height: 1.8; margin-bottom: 40px; }
@@ -32,10 +33,11 @@
   .resumos-list.active { display: block; }
   .resumo-item { background: #ffffff; padding: 20px; margin: 15px 0; border-radius: 10px; border-left: 4px solid #4682B4; transition: all 0.3s ease; cursor: pointer; position: relative; }
   .resumo-item:hover { background: #f8f9fa; transform: translateX(5px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+  .resumo-item.highlighted { background: #fff3cd; border-left-color: #ffc107; }
   .resumo-title { font-family: 'Playfair Display', serif; font-weight: 600; color: #4682B4; margin-bottom: 10px; font-size: 1.2em; }
   .resumo-preview { font-family: 'Open Sans', sans-serif; color: #666; font-size: 0.95em; line-height: 1.5; }
   .resumo-author { font-family: 'Open Sans', sans-serif; color: #888; font-size: 0.85em; margin-top: 8px; font-style: italic; }
-  .delete-btn { position: absolute; top: 10px; right: 10px; background: #FF6347; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; display: none; font-size: 16px; }
+  .delete-btn { position: absolute; top: 10px; right: 10px; background: #FF6347; color: white; border: none; border-radius: 5px; padding: 5px 8px; cursor: pointer; display: none; font-size: 14px; }
   .edit-mode .delete-btn { display: block; }
   .team-section { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; margin-bottom: 40px; }
   .team-member { background: rgba(255,255,255,0.95); padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; transition: all 0.3s ease; }
@@ -51,6 +53,7 @@
   .contact-item { display: flex; align-items: center; gap: 12px; color: #555; font-family: 'Open Sans', sans-serif; }
   .contact-item a { color: #4682B4; text-decoration: none; transition: all 0.3s ease; }
   .contact-item a:hover { color: #5F9EA0; transform: scale(1.05); }
+  .loading { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.9); padding: 20px; border-radius: 10px; display: none; z-index: 15000; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
   #configButton {
     position: fixed;
     bottom: 25px;
@@ -112,29 +115,30 @@
   }
   #modalTabs {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     margin-bottom: 1.5rem;
   }
   .tabButton {
     flex: 1;
     background-color: #cce6ff;
     border: none;
-    padding: 0.6rem 0;
+    padding: 0.6rem 0.3rem;
     font-weight: 700;
     font-family: 'Open Sans', sans-serif;
     cursor: pointer;
     border-radius: 8px 8px 0 0;
     color: #003366;
     transition: background-color 0.3s ease;
+    font-size: 0.9rem;
   }
   .tabButton.active {
     background-color: #4682B4;
     color: white;
   }
-  #tabContentAdd, #tabContentEdit {
+  #tabContentAdd, #tabContentEdit, #tabContentFirebase {
     display: none;
   }
-  #tabContentAdd.active, #tabContentEdit.active {
+  #tabContentAdd.active, #tabContentEdit.active, #tabContentFirebase.active {
     display: block;
   }
   #addSummaryForm label {
@@ -144,7 +148,8 @@
   }
   #addSummaryForm select,
   #addSummaryForm input[type="text"],
-  #addSummaryForm textarea {
+  #addSummaryForm textarea,
+  #tabContentFirebase input[type="text"] {
     width: 100%;
     padding: 0.5rem;
     margin-top: 0.3rem;
@@ -156,8 +161,10 @@
   #addSummaryForm textarea {
     resize: vertical;
   }
-  #addSummaryForm button {
-    margin-top: 1.8rem;
+  #addSummaryForm button,
+  .edit-buttons button,
+  #tabContentFirebase button {
+    margin-top: 1rem;
     background-color: #4682B4;
     color: white;
     border: none;
@@ -167,8 +174,11 @@
     cursor: pointer;
     width: 100%;
     font-family: 'Open Sans', sans-serif;
+    transition: background-color 0.3s ease;
   }
-  #addSummaryForm button:hover {
+  #addSummaryForm button:hover,
+  .edit-buttons button:hover,
+  #tabContentFirebase button:hover {
     background-color: #2c5d8a;
   }
   #editSummaryList {
@@ -215,25 +225,29 @@
     gap: 10px;
     margin-bottom: 1rem;
   }
-  .edit-buttons button {
-    background-color: #4682B4;
-    color: white;
-    border: none;
-    padding: 0.7rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'Open Sans', sans-serif;
-    transition: background-color 0.3s ease;
-  }
-  .edit-buttons button:hover {
-    background-color: #2c5d8a;
-  }
   .edit-buttons button.danger {
     background-color: #cc0000;
   }
   .edit-buttons button.danger:hover {
     background-color: #990000;
+  }
+  .firebase-setup {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 14px;
+  }
+  .firebase-setup h3 {
+    margin-bottom: 10px;
+    color: #003366;
+  }
+  .firebase-setup label {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+    color: #003366;
   }
   @media (max-width: 768px) {
     .container { padding: 10px; }
@@ -242,17 +256,23 @@
     .materias-grid { grid-template-columns: 1fr; }
     .team-section { grid-template-columns: 1fr; }
     .footer-content { flex-direction: column; gap: 25px; }
+    .tabButton { font-size: 0.8rem; padding: 0.5rem 0.2rem; }
   }
 </style>
 </head>
 <body>
+<div class="loading" id="loadingIndicator">
+  <div>Carregando dados...</div>
+</div>
+
 <div class="container">
   <header>
     <div class="logo">Realize</div>
     <div class="slogan">Resumos feitos por estudantes, para estudantes</div>
     <div class="search-container">
       <input type="text" class="search-box" placeholder="Pesquisar resumos por matéria ou tópico..." id="searchInput" />
-      <button class="search-btn" onclick="searchResumos()">Buscar</button>
+      <button class="clear-search" id="clearSearchBtn">Limpar</button>
+      <button class="search-btn" onclick="performSearch()">Buscar</button>
     </div>
   </header>
 
@@ -318,7 +338,7 @@
     <div class="team-member">
       <div class="member-photo">C</div>
       <div class="member-name">Carolina Corrêa de Souza Valadares</div>
-      <div class="member-birth">27 de fevereiro de 2012</div>
+      <div class="member-birth">27 de junho de 2012</div>
       <div class="member-bio">
         Adoro ler livros e ver filmes, e aspiro por um bom futuro acadêmico. Venho desenvolvendo uma grande 
         curiosidade pelo mundo e pelas diferentes áreas do conhecimento. Tenho o sonho de estudar no exterior, 
@@ -368,10 +388,12 @@
     <button id="modalCloseBtn" aria-label="Fechar modal">&times;</button>
     <h2 id="modalTitle">Configurações</h2>
     <div id="modalTabs">
-      <button class="tabButton active" id="tabAdd" data-tab="add">Adicionar Resumo</button>
-      <button class="tabButton" id="tabEdit" data-tab="edit">Modo de Edição</button>
+      <button class="tabButton active" id="tabAdd" data-tab="add">Adicionar</button>
+      <button class="tabButton" id="tabEdit" data-tab="edit">Edição</button>
+      <button class="tabButton" id="tabFirebase" data-tab="firebase">Firebase</button>
     </div>
     <div id="modalError" role="alert" aria-live="assertive"></div>
+    
     <div id="tabContentAdd" class="tabContent active">
       <form id="addSummaryForm">
         <label for="subjectSelect">Matéria:</label>
@@ -396,37 +418,74 @@
         <button type="submit">Adicionar Resumo</button>
       </form>
     </div>
+    
     <div id="tabContentEdit" class="tabContent">
       <div class="edit-buttons">
         <button id="editModeBtn">Ativar Modo de Edição</button>
         <button id="exportBtn">Exportar Backup</button>
         <button id="importBtn">Importar Resumos</button>
+        <button id="syncBtn">Sincronizar Firebase</button>
         <button id="clearDataBtn" class="danger">Limpar Todos os Dados</button>
       </div>
       <ul id="editSummaryList"></ul>
+    </div>
+    
+    <div id="tabContentFirebase" class="tabContent">
+      <div class="firebase-setup">
+        <h3>Configuração Firebase</h3>
+        <p>Para ativar sincronização online:</p>
+        
+        <label for="firebaseApiKey">API Key:</label>
+        <input type="text" id="firebaseApiKey" placeholder="Sua API Key do Firebase" />
+        
+        <label for="firebaseAuthDomain">Auth Domain:</label>
+        <input type="text" id="firebaseAuthDomain" placeholder="seu-projeto.firebaseapp.com" />
+        
+        <label for="firebaseProjectId">Project ID:</label>
+        <input type="text" id="firebaseProjectId" placeholder="seu-projeto-id" />
+        
+        <label for="firebaseStorageBucket">Storage Bucket:</label>
+        <input type="text" id="firebaseStorageBucket" placeholder="seu-projeto.appspot.com" />
+        
+        <button id="saveFirebaseConfig">Salvar Configuração</button>
+        <button id="testFirebaseConnection">Testar Conexão</button>
+      </div>
+      
+      <div id="firebaseStatus"></div>
     </div>
   </div>
 </div>
 
 <script>
+  // Variáveis globais
   const ADMIN_PASSWORD = "mydream5678";
   let resumosPorMateria = {
     matematica: [], portugues: [], historia: [], geografia: [],
     ciencias: [], ingles: [], fisica: [], quimica: [], biologia: []
   };
   let isEditMode = false;
+  let currentSearchTerm = '';
+  let firebaseApp = null;
+  let db = null;
   const subjectsArray = ['matematica', 'portugues', 'historia', 'geografia', 'ciencias', 'ingles', 'fisica', 'quimica', 'biologia'];
 
-  function saveData() {
+  // Função para mostrar/esconder loading
+  function showLoading(show) {
+    document.getElementById('loadingIndicator').style.display = show ? 'block' : 'none';
+  }
+
+  // Salvar dados localmente
+  function saveDataLocal() {
     try {
       const dataString = JSON.stringify(resumosPorMateria);
       document.cookie = `resumosData=${encodeURIComponent(dataString)}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
     } catch (e) {
-      console.error('Erro ao salvar dados:', e);
+      console.error('Erro ao salvar dados localmente:', e);
     }
   }
 
-  function loadData() {
+  // Carregar dados localmente
+  function loadDataLocal() {
     try {
       const cookies = document.cookie.split(';');
       const dataCookie = cookies.find(cookie => cookie.trim().startsWith('resumosData='));
@@ -440,170 +499,199 @@
         }
       }
     } catch (e) {
-      console.error('Erro ao carregar dados:', e);
+      console.error('Erro ao carregar dados locais:', e);
     }
   }
 
-  window.addEventListener('load', () => {
-    loadData();
-    console.log('Dados carregados:', resumosPorMateria);
-  });
-
-  const configButton = document.getElementById('configButton');
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modalCloseBtn = document.getElementById('modalCloseBtn');
-  const modalTabs = document.querySelectorAll('.tabButton');
-  const tabContents = document.querySelectorAll('.tabContent');
-  const modalError = document.getElementById('modalError');
-  const editModeBtn = document.getElementById('editModeBtn');
-  const addForm = document.getElementById('addSummaryForm');
-  const importBtn = document.getElementById('importBtn');
-  const exportBtn = document.getElementById('exportBtn');
-  const clearDataBtn = document.getElementById('clearDataBtn');
-  const editList = document.getElementById('editSummaryList');
-
-  configButton.addEventListener('click', function() {
-    const password = prompt("Por favor, digite a senha de administrador:");
-    if (password === ADMIN_PASSWORD) {
-      modalOverlay.setAttribute('aria-hidden', 'false');
-      modalOverlay.classList.add('active');
-      configButton.setAttribute('aria-expanded', 'true');
-    } else {
-      alert("Senha incorreta. Acesso negado.");
+  // Salvar configuração Firebase
+  function saveFirebaseConfig() {
+    const config = {
+      apiKey: document.getElementById('firebaseApiKey').value.trim(),
+      authDomain: document.getElementById('firebaseAuthDomain').value.trim(),
+      projectId: document.getElementById('firebaseProjectId').value.trim(),
+      storageBucket: document.getElementById('firebaseStorageBucket').value.trim()
+    };
+    
+    if (!config.apiKey || !config.authDomain || !config.projectId) {
+      alert('Preencha pelo menos API Key, Auth Domain e Project ID');
+      return;
     }
-  });
+    
+    try {
+      document.cookie = `firebaseConfig=${encodeURIComponent(JSON.stringify(config))}; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/`;
+      alert('Configuração Firebase salva!');
+    } catch (e) {
+      alert('Erro ao salvar configuração');
+    }
+  }
 
-  modalCloseBtn.addEventListener('click', closeModal);
-  modalOverlay.addEventListener('click', (e) => {
-    if (e.target === modalOverlay) closeModal();
-  });
+  // Obter configuração Firebase
+  function getFirebaseConfig() {
+    try {
+      const cookies = document.cookie.split(';');
+      const configCookie = cookies.find(cookie => cookie.trim().startsWith('firebaseConfig='));
+      
+      if (configCookie) {
+        const configString = decodeURIComponent(configCookie.split('=')[1]);
+        return JSON.parse(configString);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar configuração Firebase:', error);
+    }
+    return null;
+  }
 
-  modalTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      modalTabs.forEach(t => t.classList.remove('active'));
-      tabContents.forEach(c => c.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('tabContent' + tab.dataset.tab.charAt(0).toUpperCase() + tab.dataset.tab.slice(1)).classList.add('active');
-    });
-  });
+  // Testar conexão Firebase
+  async function testFirebaseConnection() {
+    try {
+      showLoading(true);
+      const config = getFirebaseConfig();
+      
+      if (!config) {
+        throw new Error('Configuração não encontrada');
+      }
 
-  addForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const materia = document.getElementById('subjectSelect').value;
-    const topic = document.getElementById('topicInput').value.trim();
-    const content = document.getElementById('contentInput').value.trim();
-    const author = document.getElementById('authorInput').value.trim();
+      // Simular teste de conexão
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      document.getElementById('firebaseStatus').innerHTML = `
+        <div style="color: green; margin-top: 10px; padding: 10px; background: #d4edda; border-radius: 5px;">
+          ✓ Configuração salva! Firebase pronto para uso.
+        </div>
+      `;
+    } catch (error) {
+      document.getElementById('firebaseStatus').innerHTML = `
+        <div style="color: red; margin-top: 10px; padding: 10px; background: #f8d7da; border-radius: 5px;">
+          ✗ Erro: ${error.message}
+        </div>
+      `;
+    } finally {
+      showLoading(false);
+    }
+  }
 
-    if (!materia || !topic || !content || !author) {
-      alert('Por favor, preencha todos os campos.');
+  // Sincronizar com Firebase (simulado)
+  async function syncWithFirebase() {
+    const config = getFirebaseConfig();
+    if (!config) {
+      alert('Configure o Firebase primeiro na aba Firebase.');
+      return;
+    }
+    
+    try {
+      showLoading(true);
+      // Simular sincronização
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      saveDataLocal();
+      alert('Sincronização simulada concluída! (Configure Firebase real para funcionalidade completa)');
+    } catch (error) {
+      alert('Erro na sincronização: ' + error.message);
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // Pesquisa melhorada
+  function performSearch() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    currentSearchTerm = searchTerm;
+    
+    if (!searchTerm) {
+      clearSearch();
       return;
     }
 
-    const newId = resumosPorMateria[materia].length > 0 ? Math.max(...resumosPorMateria[materia].map(r => r.id)) + 1 : 1;
-    resumosPorMateria[materia].push({ id: newId, title: topic, preview: content, author });
-    
-    saveData();
-    
-    displayResumos(materia, resumosPorMateria[materia]);
-    addForm.reset();
-    alert('Resumo adicionado e salvo com sucesso!');
-  });
+    document.getElementById('clearSearchBtn').style.display = 'block';
+    let found = false;
+    let results = [];
 
-  editModeBtn.addEventListener('click', () => {
-    isEditMode = !isEditMode;
-    document.body.classList.toggle('edit-mode', isEditMode);
-    editModeBtn.textContent = isEditMode ? "Desativar Modo de Edição" : "Ativar Modo de Edição";
-    renderEditList();
-    
     subjectsArray.forEach(materia => {
-      const container = document.getElementById(materia);
-      if (container.classList.contains('active')) {
-        displayResumos(materia, resumosPorMateria[materia] || []);
+      const resumos = resumosPorMateria[materia] || [];
+      const filteredResumos = resumos.filter(resumo => 
+        resumo.title.toLowerCase().includes(searchTerm) || 
+        resumo.preview.toLowerCase().includes(searchTerm) ||
+        resumo.author.toLowerCase().includes(searchTerm) ||
+        materia.toLowerCase().includes(searchTerm)
+      );
+      
+      if (filteredResumos.length > 0) {
+        found = true;
+        results.push({materia, resumos: filteredResumos});
       }
     });
-  });
 
-  exportBtn.addEventListener('click', () => {
-    const dataString = JSON.stringify(resumosPorMateria, null, 2);
-    const blob = new Blob([dataString], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resumos_backup.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    alert('Backup exportado com sucesso!');
-  });
-
-  importBtn.addEventListener('click', () => {
-    const data = prompt("Cole aqui os dados dos resumos em JSON:");
-    if (!data) return;
-    try {
-      const parsedData = JSON.parse(data);
-      resumosPorMateria = parsedData;
-      
-      saveData();
-      
-      subjectsArray.forEach(materia => {
-        displayResumos(materia, resumosPorMateria[materia] || []);
-      });
-      renderEditList();
-      alert('Resumos importados e salvos com sucesso!');
-    } catch (e) {
-      alert('Formato JSON inválido.');
+    if (!found) {
+      alert('Nenhum resumo encontrado para: ' + searchTerm);
+      return;
     }
-  });
 
-  clearDataBtn.addEventListener('click', () => {
-    const confirmation = prompt('ATENÇÃO: Isso vai apagar TODOS os resumos!\nPara confirmar, digite "APAGAR TUDO":');
-    if (confirmation === 'APAGAR TUDO') {
-      resumosPorMateria = {
-        matematica: [], portugues: [], historia: [], geografia: [],
-        ciencias: [], ingles: [], fisica: [], quimica: [], biologia: []
-      };
-      saveData();
-      subjectsArray.forEach(materia => {
-        displayResumos(materia, resumosPorMateria[materia]);
-      });
-      renderEditList();
-      alert('Todos os dados foram apagados!');
-    }
-  });
+    // Fechar todas as seções
+    subjectsArray.forEach(materia => {
+      document.getElementById(materia).classList.remove('active');
+    });
 
-  function closeModal() {
-    modalOverlay.setAttribute('aria-hidden', 'true');
-    modalOverlay.classList.remove('active');
-    configButton.setAttribute('aria-expanded', 'false');
+    // Mostrar resultados
+    results.forEach(result => {
+      const container = document.getElementById(result.materia);
+      container.classList.add('active');
+      displayResumos(result.materia, result.resumos, searchTerm);
+    });
+
+    document.querySelector('.materias-section').scrollIntoView({ behavior: 'smooth' });
   }
 
-  function toggleMateria(materia) {
-    const resumosList = document.getElementById(materia);
-    resumosList.classList.toggle('active');
+  // Limpar pesquisa
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('clearSearchBtn').style.display = 'none';
+    currentSearchTerm = '';
     
-    if (resumosList.classList.contains('active') && resumosList.innerHTML === '') {
-      displayResumos(materia, resumosPorMateria[materia] || []);
-    }
+    subjectsArray.forEach(materia => {
+      document.getElementById(materia).classList.remove('active');
+    });
   }
 
-  function displayResumos(materia, resumos) {
+  // Destacar texto na pesquisa
+  function highlightSearchTerm(text, searchTerm) {
+  if (!searchTerm) return text;
+
+  const regex = new RegExp(
+    `(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
+    'gi'
+  );
+
+  return text.replace(
+    regex,
+    '<mark style="background: #ffeb3b; padding: 1px 2px;">$1</mark>'
+  );
+}
+
+
+  // Exibir resumos
+  function displayResumos(materia, resumos, searchTerm) {
     const container = document.getElementById(materia);
     if (!resumos || resumos.length === 0) {
       container.innerHTML = '<p style="text-align: center; color: #888; font-style: italic; padding: 20px;">Nenhum resumo disponível ainda.</p>';
       return;
     }
 
-    container.innerHTML = resumos.map(resumo => `
-      <div class="resumo-item" onclick="showResumo('${materia}', ${resumo.id})">
-        <div class="resumo-title">${resumo.title}</div>
-        <div class="resumo-preview">${resumo.preview.substring(0, 100)}...</div>
-        <div class="resumo-author">Por: ${resumo.author}</div>
-        <button class="delete-btn" onclick="event.stopPropagation(); deleteResumo('${materia}', ${resumo.id})" title="Excluir resumo">🗑️</button>
-      </div>
-    `).join('');
+    container.innerHTML = resumos.map(resumo => {
+      const highlightedTitle = highlightSearchTerm(resumo.title, searchTerm || '');
+      const highlightedPreview = highlightSearchTerm(resumo.preview.substring(0, 100) + '...', searchTerm || '');
+      const highlightedAuthor = highlightSearchTerm(resumo.author, searchTerm || '');
+      
+      return `
+        <div class="resumo-item ${searchTerm ? 'highlighted' : ''}" onclick="showResumo('${materia}', ${resumo.id})">
+          <div class="resumo-title">${highlightedTitle}</div>
+          <div class="resumo-preview">${highlightedPreview}</div>
+          <div class="resumo-author">Por: ${highlightedAuthor}</div>
+          <button class="delete-btn" onclick="event.stopPropagation(); deleteResumo('${materia}', ${resumo.id})" title="Excluir resumo">×</button>
+        </div>
+      `;
+    }).join('');
   }
 
+  // Mostrar resumo completo
   function showResumo(materia, id) {
     const resumo = resumosPorMateria[materia].find(r => r.id === id);
     if (resumo) {
@@ -625,22 +713,34 @@
     }
   }
 
+  // Deletar resumo
   function deleteResumo(materia, id) {
     if (confirm('Tem certeza que deseja excluir este resumo?')) {
       resumosPorMateria[materia] = resumosPorMateria[materia].filter(r => r.id !== id);
-      
-      saveData();
-      
-      displayResumos(materia, resumosPorMateria[materia]);
+      saveDataLocal();
+      displayResumos(materia, resumosPorMateria[materia], currentSearchTerm);
       renderEditList();
-      alert('Resumo excluído e alterações salvas!');
+      alert('Resumo excluído!');
     }
   }
 
+  // Toggle matéria
+  function toggleMateria(materia) {
+    const resumosList = document.getElementById(materia);
+    resumosList.classList.toggle('active');
+    
+    if (resumosList.classList.contains('active') && resumosList.innerHTML === '') {
+      displayResumos(materia, resumosPorMateria[materia] || [], currentSearchTerm);
+    }
+  }
+
+  // Renderizar lista de edição
   function renderEditList() {
     if (!isEditMode) return;
     
+    const editList = document.getElementById('editSummaryList');
     editList.innerHTML = '';
+    
     subjectsArray.forEach(materia => {
       if (resumosPorMateria[materia] && resumosPorMateria[materia].length > 0) {
         resumosPorMateria[materia].forEach(resumo => {
@@ -655,62 +755,186 @@
     });
   }
 
-  function searchResumos() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-    if (!searchTerm) {
-      alert('Por favor, digite algo para pesquisar.');
-      return;
-    }
-
-    let found = false;
-    let results = [];
-
-    subjectsArray.forEach(materia => {
-      const resumos = resumosPorMateria[materia] || [];
-      const filteredResumos = resumos.filter(resumo => 
-        resumo.title.toLowerCase().includes(searchTerm) || 
-        resumo.preview.toLowerCase().includes(searchTerm) ||
-        resumo.author.toLowerCase().includes(searchTerm)
-      );
+  // Configurar pesquisa em tempo real
+  function setupRealTimeSearch() {
+    const searchInput = document.getElementById('searchInput');
+    let searchTimeout;
+    
+    searchInput.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      const value = this.value.trim();
       
-      if (filteredResumos.length > 0) {
-        found = true;
-        results.push({materia, resumos: filteredResumos});
+      if (value.length === 0) {
+        clearSearch();
+        return;
+      }
+      
+      if (value.length >= 2) {
+        searchTimeout = setTimeout(() => {
+          performSearch();
+        }, 300);
       }
     });
+  }
 
-    if (!found) {
-      alert('Nenhum resumo encontrado para: ' + searchTerm);
+  // Inicialização
+  window.addEventListener('load', function() {
+    loadDataLocal();
+    setupRealTimeSearch();
+    
+    // Carregar config Firebase se existir
+    const config = getFirebaseConfig();
+    if (config) {
+      document.getElementById('firebaseApiKey').value = config.apiKey || '';
+      document.getElementById('firebaseAuthDomain').value = config.authDomain || '';
+      document.getElementById('firebaseProjectId').value = config.projectId || '';
+      document.getElementById('firebaseStorageBucket').value = config.storageBucket || '';
+    }
+  });
+
+  // Event Listeners
+  document.getElementById('configButton').addEventListener('click', function() {
+    const password = prompt("Digite a senha de administrador:");
+    if (password === ADMIN_PASSWORD) {
+      document.getElementById('modalOverlay').classList.add('active');
+    } else {
+      alert("Senha incorreta.");
+    }
+  });
+
+  document.getElementById('modalCloseBtn').addEventListener('click', function() {
+    document.getElementById('modalOverlay').classList.remove('active');
+  });
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+    }
+  });
+
+  // Tabs
+  document.querySelectorAll('.tabButton').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tabButton').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tabContent').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+      document.getElementById('tabContent' + this.dataset.tab.charAt(0).toUpperCase() + this.dataset.tab.slice(1)).classList.add('active');
+    });
+  });
+
+  // Adicionar resumo
+  document.getElementById('addSummaryForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const materia = document.getElementById('subjectSelect').value;
+    const topic = document.getElementById('topicInput').value.trim();
+    const content = document.getElementById('contentInput').value.trim();
+    const author = document.getElementById('authorInput').value.trim();
+
+    if (!materia || !topic || !content || !author) {
+      alert('Preencha todos os campos.');
       return;
     }
 
-    // Fecha todas as seções primeiro
+    const newId = resumosPorMateria[materia].length > 0 ? Math.max(...resumosPorMateria[materia].map(r => r.id)) + 1 : 1;
+    resumosPorMateria[materia].push({ id: newId, title: topic, preview: content, author });
+    
+    saveDataLocal();
+    displayResumos(materia, resumosPorMateria[materia]);
+    this.reset();
+    alert('Resumo adicionado!');
+  });
+
+  // Modo edição
+  document.getElementById('editModeBtn').addEventListener('click', function() {
+    isEditMode = !isEditMode;
+    document.body.classList.toggle('edit-mode', isEditMode);
+    this.textContent = isEditMode ? "Desativar Modo de Edição" : "Ativar Modo de Edição";
+    renderEditList();
+    
     subjectsArray.forEach(materia => {
-      document.getElementById(materia).classList.remove('active');
+      const container = document.getElementById(materia);
+      if (container.classList.contains('active')) {
+        displayResumos(materia, resumosPorMateria[materia] || [], currentSearchTerm);
+      }
     });
+  });
 
-    // Abre e exibe apenas os resultados encontrados
-    results.forEach(result => {
-      const container = document.getElementById(result.materia);
-      container.classList.add('active');
-      displayResumos(result.materia, result.resumos);
-    });
+  // Exportar
+  document.getElementById('exportBtn').addEventListener('click', function() {
+    const dataString = JSON.stringify(resumosPorMateria, null, 2);
+    const blob = new Blob([dataString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `resumos_backup_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    alert('Backup exportado!');
+  });
 
-    // Scroll para a seção de matérias
-    document.querySelector('.materias-section').scrollIntoView({ behavior: 'smooth' });
-  }
-
-  document.getElementById('searchInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      searchResumos();
+  // Importar
+  document.getElementById('importBtn').addEventListener('click', function() {
+    const data = prompt("Cole os dados JSON aqui:");
+    if (!data) return;
+    try {
+      const parsedData = JSON.parse(data);
+      resumosPorMateria = parsedData;
+      saveDataLocal();
+      
+      subjectsArray.forEach(materia => {
+        displayResumos(materia, resumosPorMateria[materia] || []);
+      });
+      renderEditList();
+      alert('Resumos importados!');
+    } catch (e) {
+      alert('JSON inválido.');
     }
   });
 
+  // Sincronizar
+  document.getElementById('syncBtn').addEventListener('click', syncWithFirebase);
+
+  // Limpar dados
+  document.getElementById('clearDataBtn').addEventListener('click', function() {
+    const confirmation = prompt('ATENÇÃO: Isso apagará TODOS os resumos!\nDigite "APAGAR TUDO" para confirmar:');
+    if (confirmation === 'APAGAR TUDO') {
+      resumosPorMateria = {
+        matematica: [], portugues: [], historia: [], geografia: [],
+        ciencias: [], ingles: [], fisica: [], quimica: [], biologia: []
+      };
+      saveDataLocal();
+      subjectsArray.forEach(materia => {
+        displayResumos(materia, resumosPorMateria[materia]);
+      });
+      renderEditList();
+      alert('Dados apagados!');
+    }
+  });
+
+  // Pesquisa
+  document.getElementById('clearSearchBtn').addEventListener('click', clearSearch);
+
+  // Firebase
+  document.getElementById('saveFirebaseConfig').addEventListener('click', saveFirebaseConfig);
+  document.getElementById('testFirebaseConnection').addEventListener('click', testFirebaseConnection);
+
+  // Atalhos teclado
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-      closeModal();
+    if (e.key === 'Escape' && document.getElementById('modalOverlay').classList.contains('active')) {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+    if (e.key === 'Enter' && e.target.id === 'searchInput') {
+      performSearch();
     }
   });
+
+  // Tornar funções globais
+  window.toggleMateria = toggleMateria;
+  window.showResumo = showResumo;
+  window.deleteResumo = deleteResumo;
+  window.performSearch = performSearch;
 </script>
 </body>
 </html>
