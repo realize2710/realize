@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Realize - Resumos Educacionais</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Playfair+Display:wght@400;700&family=Open+Sans:wght@400;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,9 +14,9 @@
         }
         
         body {
-            font-family: 'Open Sans', sans-serif;
+            font-family: 'Quicksand', sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #2c3e50;
             background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #E0F6FF 100%);
             min-height: 100vh;
         }
@@ -23,357 +24,749 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 20px;
         }
         
-        header {
+        /* Hero Section */
+        .hero-section {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            margin: 40px 0;
+            overflow: hidden;
+            box-shadow: 0 25px 80px rgba(70,130,180,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .hero-content {
+            padding: 100px 80px;
             text-align: center;
-            margin-bottom: 40px;
-            background: rgba(255,255,255,0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
         .logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4em;
-            font-weight: 700;
-            color: #4682B4;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-family: 'Playfair Display', serif;
+            font-size: 5em;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 25px;
+            letter-spacing: -3px;
+            text-shadow: none;
         }
         
-        .slogan {
+        .tagline {
             font-family: 'Playfair Display', serif;
-            font-size: 1.4em;
+            font-size: 1.5em;
+            color: #3b82f6;
+            margin-bottom: 50px;
+            font-weight: 500;
             font-style: italic;
-            color: #5F9EA0;
-            margin-bottom: 30px;
+        }
+        
+        .hero-description {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2em;
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto 50px;
+            line-height: 1.9;
             font-weight: 400;
         }
         
-        .about-section {
-            background: rgba(255,255,255,0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
         }
         
-        .about-section h2 {
-            font-family: 'Playfair Display', serif;
-            color: #4682B4;
-            font-size: 2.8em;
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-        
-        .about-text {
-            font-family: 'Open Sans', sans-serif;
-            font-size: 1.1em;
-            text-align: center;
-            color: #555;
-            line-height: 1.8;
-            margin-bottom: 40px;
-        }
-        
-        .submission-info h3 {
-            font-family: 'Playfair Display', serif;
-            color: #4682B4;
-            font-size: 2em;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .submission-info p {
-            font-family: 'Open Sans', sans-serif;
-            font-size: 1.1em;
-            text-align: center;
-            color: #555;
-            line-height: 1.8;
-        }
-        
-        .resumos-section {
-            background: rgba(255,255,255,0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            margin-bottom: 40px;
-            text-align: center;
-        }
-        
-        .resumos-section h2 {
-            font-family: 'Playfair Display', serif;
-            color: #4682B4;
-            font-size: 2.8em;
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-        
-        .resumos-redirect {
-            background: linear-gradient(135deg, #4682B4, #87CEEB);
+        .cta-button {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
             color: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            display: block;
-        }
-        
-        .resumos-redirect:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(70,130,180,0.3);
-            color: white;
-            text-decoration: none;
-        }
-        
-        .resumos-redirect h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2em;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-        
-        .resumos-redirect p {
-            font-family: 'Open Sans', sans-serif;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 60px;
+            font-family: 'Quicksand', sans-serif;
             font-size: 1.2em;
-            line-height: 1.6;
-            margin-bottom: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 40px rgba(30,58,138,0.3);
         }
         
-        .redirect-button {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid white;
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(30,58,138,0.4);
             color: white;
-            padding: 15px 30px;
-            font-size: 1.1em;
+            text-decoration: none;
+        }
+        
+        .contribute-button {
+            background: white;
+            color: #1e3a8a;
+            padding: 20px 50px;
+            border: 2px solid #1e3a8a;
+            border-radius: 60px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2em;
             font-weight: 600;
-            border-radius: 50px;
-            font-family: 'Open Sans', sans-serif;
-            transition: all 0.3s ease;
             cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
             display: inline-block;
         }
         
-        .redirect-button:hover {
-            background: white;
-            color: #4682B4;
+        .contribute-button:hover {
+            background: #1e3a8a;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(30,58,138,0.3);
+            text-decoration: none;
         }
         
-        .resumos-info {
-            font-family: 'Open Sans', sans-serif;
-            font-size: 1em;
-            color: #666;
-            font-style: italic;
+        /* Features Section */
+        .features-section {
+            margin: 80px 0;
         }
         
-        .team-section {
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.2em;
+            font-weight: 700;
+            color: #1e3a8a;
+            text-align: center;
+            margin-bottom: 70px;
+        }
+        
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 40px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 60px rgba(30,58,138,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 40px 100px rgba(30,58,138,0.15);
+        }
+        
+        .feature-icon {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: white;
+            font-size: 2.2em;
+        }
+        
+        .feature-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8em;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        
+        .feature-description {
+            font-family: 'Quicksand', sans-serif;
+            color: #64748b;
+            line-height: 1.8;
+            font-weight: 400;
+            font-size: 1.05em;
+        }
+        
+        /* About Section */
+        .about-section {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 80px;
+            margin: 80px 0;
+            box-shadow: 0 25px 80px rgba(30,58,138,0.12);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .about-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 35px;
+            line-height: 1.2;
+        }
+        
+        .about-content p {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.15em;
+            color: #64748b;
+            line-height: 1.9;
+            margin-bottom: 25px;
+            font-weight: 400;
+        }
+        
+        /* Access Section */
+        .access-section {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 25px;
+            padding: 80px;
+            margin: 80px 0;
+            text-align: center;
+            color: white;
+            box-shadow: 0 25px 80px rgba(30,58,138,0.3);
+        }
+        
+        .access-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+        
+        .access-section p {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.3em;
+            margin-bottom: 50px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+        
+        .access-button {
+            background: white;
+            color: #1e3a8a;
+            padding: 20px 50px;
+            border: none;
+            border-radius: 60px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 40px rgba(255,255,255,0.2);
+        }
+        
+        .access-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(255,255,255,0.3);
+            color: #1e3a8a;
+            text-decoration: none;
+        }
+        
+        /* Team Section */
+        .team-section {
+            margin: 80px 0;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 50px;
         }
         
         .team-member {
-            background: rgba(255,255,255,0.95);
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 50px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
+            box-shadow: 0 20px 60px rgba(30,58,138,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
         .team-member:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transform: translateY(-12px);
+            box-shadow: 0 40px 100px rgba(30,58,138,0.15);
         }
         
-        .member-photo {
-            width: 150px;
-            height: 150px;
+        .member-avatar {
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #4682B4, #87CEEB);
-            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            margin: 0 auto 30px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Playfair Display', serif;
             font-size: 3.5em;
             color: white;
-            font-weight: bold;
+            font-weight: 700;
         }
         
         .member-name {
             font-family: 'Playfair Display', serif;
             font-size: 1.6em;
-            color: #4682B4;
-            font-weight: 700;
+            font-weight: 600;
+            color: #1e3a8a;
             margin-bottom: 10px;
         }
         
         .member-birth {
-            font-family: 'Open Sans', sans-serif;
-            color: #888;
+            font-family: 'Quicksand', sans-serif;
+            color: #64748b;
             font-size: 0.95em;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            font-weight: 500;
         }
         
         .member-bio {
-            font-family: 'Open Sans', sans-serif;
-            text-align: justify;
-            line-height: 1.7;
-            color: #555;
+            font-family: 'Quicksand', sans-serif;
+            color: #64748b;
+            line-height: 1.8;
+            text-align: left;
+            font-weight: 400;
             font-size: 1.05em;
         }
         
-        footer {
-            background: rgba(255,255,255,0.95);
-            padding: 35px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        /* Contribution Section */
+        .contribution-section {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 80px;
+            margin: 80px 0;
             text-align: center;
+            box-shadow: 0 25px 80px rgba(30,58,138,0.12);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .contribution-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 35px;
+        }
+        
+        .contribution-section p {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.15em;
+            color: #64748b;
+            line-height: 1.9;
+            max-width: 800px;
+            margin: 0 auto 35px;
+            font-weight: 400;
+        }
+        
+        .email-highlight {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4em;
+            color: #1e3a8a;
+            font-weight: 600;
+            margin: 40px 0;
+        }
+        
+        .email-highlight a {
+            color: #3b82f6;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .email-highlight a:hover {
+            color: #1e3a8a;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            margin: 40px 0;
+            padding: 60px;
+            box-shadow: 0 25px 80px rgba(30,58,138,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
         }
         
         .footer-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 40px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        
+        .footer-brand {
+            text-align: left;
         }
         
         .footer-logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5em;
-            font-weight: 700;
-            color: #4682B4;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8em;
+            font-weight: 800;
+            color: #1e3a8a;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
         }
         
-        .contact-info {
+        .footer-tagline {
+            font-family: 'Quicksand', sans-serif;
+            color: #64748b;
+            font-size: 1.05em;
+            line-height: 1.7;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+        
+        .social-links {
             display: flex;
-            flex-direction: column;
-            gap: 12px;
+            gap: 20px;
+        }
+        
+        .social-link {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+        }
+        
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(30,58,138,0.3);
+        }
+        
+        .footer-links h4,
+        .footer-contact h4 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 25px;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a,
+        .footer-contact a {
+            font-family: 'Quicksand', sans-serif;
+            color: #64748b;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+        
+        .footer-links a:hover,
+        .footer-contact a:hover {
+            color: #1e3a8a;
         }
         
         .contact-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            color: #555;
-            font-family: 'Open Sans', sans-serif;
+            margin-bottom: 15px;
         }
         
-        .contact-item a {
-            color: #4682B4;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        .contact-item i {
+            color: #3b82f6;
+            margin-right: 12px;
+            width: 20px;
         }
         
-        .contact-item a:hover {
-            color: #5F9EA0;
-            transform: scale(1.05);
+        .footer-bottom {
+            margin-top: 50px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(30,58,138,0.15);
+            text-align: center;
+            font-family: 'Quicksand', sans-serif;
+            color: #64748b;
+            font-size: 0.95em;
+            font-weight: 400;
         }
         
-        @media (max-width: 768px) {
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 968px) {
             .container {
-                padding: 10px;
+                padding: 0 15px;
             }
+            
+            .hero-content {
+                padding: 60px 40px;
+            }
+            
             .logo {
-                font-size: 3em;
+                font-size: 4em;
             }
-            .slogan {
-                font-size: 1.2em;
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
             }
-            .team-section {
+            
+            .team-grid {
                 grid-template-columns: 1fr;
             }
+            
             .footer-content {
-                flex-direction: column;
-                gap: 25px;
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
             }
+            
+            .footer-brand {
+                text-align: center;
+            }
+            
+            .social-links {
+                justify-content: center;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero-section,
+        .feature-card,
+        .about-section,
+        .team-member {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .feature-card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        
+        .feature-card:nth-child(3) {
+            animation-delay: 0.2s;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">Realize</div>
-            <div class="slogan">Resumos feitos por estudantes, para estudantes</div>
-        </header>
-
-        <div class="about-section">
-            <h2>Sobre o Projeto</h2>
-            <div class="about-text">
-                O Realize é um projeto criado com o objetivo de compartilhar conhecimento de forma clara e acessível. 
-                Acreditamos que a educação deve ser para todos, e por isso transformamos conteúdos complexos em resumos 
-                compreensíveis. Nosso sonho é fazer a diferença na vida das pessoas através do conhecimento, porque 
-                acreditamos que ele é a base de tudo na vida.
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 class="logo">Realize</h1>
+                <p class="tagline">Resumos feitos por estudantes, para estudantes</p>
+                <p class="hero-description">
+                    Uma iniciativa filantrópica dedicada a democratizar o acesso ao conhecimento. Transformamos 
+                    conteúdos acadêmicos complexos em resumos claros e acessíveis, garantindo que todo estudante 
+                    tenha as ferramentas necessárias para seu sucesso educacional.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://sites.google.com/view/realizeresumes/home" class="cta-button" target="_blank" rel="noopener noreferrer">
+                        Acessar Resumos Gratuitos
+                    </a>
+                    <a href="#contribuir" class="contribute-button">
+                        Contribuir
+                    </a>
+                </div>
             </div>
-            <div class="submission-info">
-                <h3>Como Contribuir</h3>
-                <p>Outros estudantes podem enviar seus resumos por email para <strong><a href="mailto:realize2710@gmail.com">realize2710@gmail.com</a></strong>. 
-                Incluam o nome da matéria, o tópico do resumo e seu nome para aparecer como autor. 
-                Juntos, construímos uma biblioteca de conhecimento feita por estudantes, para estudantes.</p>
-            </div>
-        </div>
+        </section>
 
-        <div class="resumos-section">
-            <h2>Nossos Resumos</h2>
-            <a href="https://sites.google.com/view/realizeresumes/home" class="resumos-redirect" target="_blank" rel="noopener noreferrer">
-                <h3>Acesse Nossa Biblioteca de Resumos</h3>
-                <p>Todos os nossos resumos educacionais estão organizados por matéria e disponíveis para consulta. 
-                Encontre conteúdos de Matemática, Português, História, Geografia, Ciências, Inglês, Física, Química e Biologia.</p>
-                <div class="redirect-button">Ir para os Resumos</div>
-            </a>
-            <p class="resumos-info">
-                Clique no link acima para acessar nossa coleção completa de resumos no Google Sites. 
-                Lá você encontrará todo o conteúdo organizado de forma prática e acessível.
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Excelência Educacional</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="feature-title">Qualidade Acadêmica</h3>
+                    <p class="feature-description">
+                        Conteúdo rigorosamente revisado e estruturado, seguindo os mais altos padrões 
+                        educacionais para garantir precisão e clareza em cada resumo disponibilizado.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="feature-title">Perspectiva Estudantil</h3>
+                    <p class="feature-description">
+                        Desenvolvido por estudantes que compreendem os desafios acadêmicos contemporâneos, 
+                        oferecendo uma abordagem única e conectada com a realidade educacional atual.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="feature-title">Acesso Universal</h3>
+                    <p class="feature-description">
+                        Projeto completamente filantrópico que visa eliminar barreiras educacionais, 
+                        garantindo que conhecimento de qualidade seja acessível a todos os estudantes.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="sobre" class="about-section">
+            <div class="about-content">
+                <h2>Sobre o Realize</h2>
+                <p>
+                    O Realize começou com uma ideia simples: ajudar outros estudantes. A gente sabe 
+                    como é difícil estudar sozinho e entender matérias complicadas. Por isso, 
+                    decidimos criar resumos que realmente funcionam.
+                </p>
+                <p>
+                    Nosso objetivo é transformar qualquer assunto difícil em algo que você consegue 
+                    entender. Fazemos isso de graça porque acreditamos que todo mundo merece ter 
+                    acesso a uma educação de qualidade.
+                </p>
+            </div>
+        </section>
+
+        <!-- Access Section -->
+        <section class="access-section">
+            <h2>Biblioteca Digital</h2>
+            <p>
+                Nossa coleção abrangente inclui resumos especializados em Matemática, Português, História, 
+                Geografia, Ciências, Inglês, Física, Química e Biologia. Todo conteúdo é organizado 
+                sistematicamente para otimizar sua experiência de aprendizado.
             </p>
-        </div>
+            <a href="https://sites.google.com/view/realizeresumes/home" class="access-button" target="_blank" rel="noopener noreferrer">
+                Explorar Biblioteca
+            </a>
+        </section>
 
-        <div class="team-section">
-            <div class="team-member">
-                <div class="member-photo">C</div>
-                <div class="member-name">Carolina Corrêa de Souza Valadares</div>
-                <div class="member-birth">27 de junho de 2012</div>
-                <div class="member-bio">
-                    Adoro ler livros e ver filmes, e aspiro por um bom futuro acadêmico. Venho desenvolvendo uma grande 
-                    curiosidade pelo mundo e pelas diferentes áreas do conhecimento. Tenho o sonho de estudar no exterior, 
-                    especialmente nos Estados Unidos, e acredito que compartilhar conhecimento é uma forma de crescimento 
-                    pessoal e coletivo. Com este projeto, quero transformar os conteúdos que estudo em textos claros e 
-                    acessíveis, para que qualquer pessoa possa entender.
+        <!-- Team Section -->
+        <section id="equipe" class="team-section">
+            <h2 class="section-title">Liderança Acadêmica</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">C</div>
+                    <h3 class="member-name">Carolina Corrêa de Souza Valadares</h3>
+                    <p class="member-birth">27 de junho de 2012</p>
+                    <p class="member-bio">
+                        Estudante dedicada com paixão pela literatura e cinema, desenvolvendo uma curiosidade 
+                        intelectual abrangente sobre diversas áreas do conhecimento. Aspira estudar no exterior, 
+                        especialmente nos Estados Unidos, e acredita firmemente que compartilhar conhecimento 
+                        é fundamental para o crescimento pessoal e coletivo. Através do Realize, transforma 
+                        conteúdos acadêmicos em textos acessíveis e compreensíveis.
+                    </p>
+                </div>
+
+                <div class="team-member">
+                    <div class="member-avatar">J</div>
+                    <h3 class="member-name">Julia Queiros Mendes</h3>
+                    <p class="member-birth">10 de fevereiro de 2012</p>
+                    <p class="member-bio">
+                        Apaixonada pela leitura, produção audiovisual e artes manuais, Julia nutre o sonho de 
+                        cursar ensino superior nos Estados Unidos. Fundamenta sua filosofia educacional na crença 
+                        de que o conhecimento é a base fundamental da vida, motivando-a a compartilhar seu 
+                        aprendizado com outros estudantes. O Realize representa sua missão de impactar 
+                        positivamente a jornada educacional de outras pessoas.
+                    </p>
                 </div>
             </div>
+        </section>
 
-            <div class="team-member">
-                <div class="member-photo">J</div>
-                <div class="member-name">Julia Queiros Mendes</div>
-                <div class="member-birth">10 de fevereiro de 2012</div>
-                <div class="member-bio">
-                    Passo meu tempo livre lendo livros, vendo séries ou fazendo crochê. Sonho em estudar em uma universidade 
-                    no exterior, mais especificamente nos Estados Unidos. Acredito que o conhecimento é a base de tudo na vida 
-                    e, por isso, desejo compartilhar o que sei com outras pessoas. Afinal, se eu não puder ajudar o próximo com 
-                    aquilo que está ao meu alcance, então de que valeria o meu aprendizado? Com esse projeto, eu espero conseguir 
-                    fazer a diferença na vida de outras pessoas!
-                </div>
+        <!-- Contribution Section -->
+        <section id="contribuir" class="contribution-section">
+            <h2>Contribua Conosco</h2>
+            <p>
+                Convidamos estudantes dedicados a se juntarem à nossa missão educacional. Contribuições 
+                são aceitas mediante revisão acadêmica, devendo incluir identificação da disciplina, 
+                tópico específico e dados do autor para devida atribuição intelectual.
+            </p>
+            <div class="email-highlight">
+                Submissões acadêmicas: <a href="mailto:realize2710@gmail.com">realize2710@gmail.com</a>
             </div>
-        </div>
+            <p>
+                Juntos, construímos um repositório acadêmico colaborativo que reflete nossa visão compartilhada 
+                de uma educação verdadeiramente democrática e acessível.
+            </p>
+        </section>
 
+        <!-- Footer -->
         <footer>
             <div class="footer-content">
-                <div class="footer-logo">Realize</div>
-                <div class="contact-info">
-                    <div class="contact-item">
-                        Email: <a href="mailto:realize2710@gmail.com">realize2710@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
-                        TikTok: <a href="https://www.tiktok.com/@.realizing_" target="_blank" rel="noopener noreferrer">.realizing_</a>
+                <div class="footer-brand">
+                    <div class="footer-logo">Realize</div>
+                    <p class="footer-tagline">
+                        Projeto educacional filantrópico dedicado à democratização do conhecimento acadêmico, 
+                        criando pontes entre complexidade curricular e compreensão universal.
+                    </p>
+                    <div class="social-links">
+                        <a href="mailto:realize2710@gmail.com" class="social-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@.realizing_" class="social-link" target="_blank" rel="noopener noreferrer" title="TikTok">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
                     </div>
                 </div>
+                
+                <div class="footer-links">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="https://sites.google.com/view/realizeresumes/home" target="_blank" rel="noopener noreferrer">Acessar Resumos</a></li>
+                        <li><a href="#sobre">Sobre o Projeto</a></li>
+                        <li><a href="#equipe">Nossa Equipe</a></li>
+                        <li><a href="#contribuir">Como Contribuir</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contato</h4>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:realize2710@gmail.com">realize2710@gmail.com</a>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fab fa-tiktok"></i>
+                        <a href="https://www.tiktok.com/@.realizing_" target="_blank" rel="noopener noreferrer">.realizing_</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Realize. Todos os direitos reservados.</p>
             </div>
         </footer>
     </div>
